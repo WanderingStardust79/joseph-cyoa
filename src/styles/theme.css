@@ -1,0 +1,597 @@
+/* ============================================================
+   Joseph CYOA — Theme System
+   A Choose Your Own Adventure Bible game (Genesis 37-41)
+   ============================================================ */
+
+/* --- CSS Custom Properties (Default Theme) --- */
+:root {
+  --color-primary: #f0c040;
+  --color-bg: #1a1a2e;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-text: #eee8dd;
+  --color-text-muted: #998;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-accent-faith: #60a5fa;
+  --color-accent-courage: #f87171;
+  --color-accent-wisdom: #34d399;
+  --color-alt-path: #e05050;
+  --color-recovery: #66aaff;
+
+  --font-display: 'Cinzel', Georgia, serif;
+  --font-body: 'Lora', Georgia, serif;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+
+/* --- Character Theme Overrides --- */
+.theme-joseph {
+  --color-primary: #f0c040;
+  --color-bg: #1a1a2e;
+  background: linear-gradient(145deg, #3a2a08 0%, #8b6914 100%) !important;
+}
+
+.theme-jacob {
+  --color-primary: #6ea8fe;
+  --color-bg: #0a1a3a;
+  background: linear-gradient(145deg, #0a1a3a 0%, #2a4a80 100%) !important;
+}
+
+.theme-brother {
+  --color-primary: #e05050;
+  --color-bg: #3a0a0a;
+  background: linear-gradient(145deg, #3a0a0a 0%, #8b2020 100%) !important;
+}
+
+.theme-butler {
+  --color-primary: #34d399;
+  --color-bg: #0a2a1a;
+  background: linear-gradient(145deg, #0a2a1a 0%, #2a6a3a 100%) !important;
+}
+
+.theme-pharaoh {
+  --color-primary: #fbbf24;
+  --color-bg: #1a0a3e;
+  background: linear-gradient(145deg, #1a0a3e 0%, #4a2c8a 100%) !important;
+}
+
+
+/* --- Background Scene Classes --- */
+.bg-intro {
+  background: linear-gradient(180deg, #1a1a2e 0%, #2a2040 50%, #1a1a2e 100%);
+}
+
+.bg-desert {
+  background: linear-gradient(180deg, #3a2a08 0%, #8b6914 40%, #5a4010 100%);
+}
+
+.bg-field {
+  background: linear-gradient(180deg, #0a2a1a 0%, #1a4a2a 50%, #0a1a10 100%);
+}
+
+.bg-egypt {
+  background: linear-gradient(180deg, #2a1a08 0%, #6a4a1a 40%, #3a2a10 100%);
+}
+
+.bg-prison {
+  background: linear-gradient(180deg, #0a0a14 0%, #1a1a28 50%, #08080e 100%);
+}
+
+.bg-palace {
+  background: linear-gradient(180deg, #1a0a3e 0%, #4a2c8a 40%, #2a1a5e 100%);
+}
+
+
+/* --- Base Reset & Body --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  margin-top: 0;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-text);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+
+/* --- Button Styles --- */
+
+/* Choice button — the main interactive element */
+.btn-choice {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-surface) 0%, rgba(255, 255, 255, 0.02) 100%);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  text-align: left;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-choice::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.btn-choice:hover {
+  transform: translateX(3px);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.btn-choice:hover::before {
+  opacity: 1;
+}
+
+.btn-choice:active {
+  transform: translateX(3px) scale(0.97);
+}
+
+.btn-choice:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Primary button — gold accent, bold CTA */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  min-height: 48px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #f0c040 0%, #d4a017 100%);
+  color: #1a1a2e;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+  box-shadow: 0 4px 14px rgba(240, 192, 64, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(240, 192, 64, 0.35);
+  filter: brightness(1.1);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 2px 8px rgba(240, 192, 64, 0.2);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Ghost button — subtle, minimal */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.btn-ghost:hover {
+  color: var(--color-text);
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.btn-ghost:active {
+  transform: scale(0.97);
+}
+
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+
+/* --- Animation Keyframes --- */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes screenShake {
+  0% { transform: translate(0, 0); }
+  15% { transform: translate(-3px, 1px); }
+  30% { transform: translate(2px, -2px); }
+  45% { transform: translate(-1px, 2px); }
+  60% { transform: translate(3px, -1px); }
+  75% { transform: translate(-2px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(240, 192, 64, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(240, 192, 64, 0.5), 0 0 40px rgba(240, 192, 64, 0.15);
+  }
+}
+
+@keyframes traitPopIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes streakFlame {
+  0%, 100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  25% {
+    transform: scaleY(1.04) scaleX(0.97);
+  }
+  50% {
+    transform: scaleY(0.97) scaleX(1.03);
+  }
+  75% {
+    transform: scaleY(1.02) scaleX(0.98);
+  }
+}
+
+@keyframes progressFill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+/* --- Utility Classes --- */
+.fade-in {
+  animation: fadeSlideIn 0.3s ease forwards;
+}
+
+.shake {
+  animation: screenShake 0.4s ease;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+
+/* --- Progress Bar --- */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--color-surface);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, rgba(240, 192, 64, 0.7) 100%);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+  animation: progressFill 2s ease-in-out infinite;
+}
+
+
+/* --- Trait Bars --- */
+.trait-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.trait-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.trait-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 60%, rgba(255, 255, 255, 0.25) 100%);
+}
+
+/* Trait-specific colors */
+.trait-fill--faith {
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+}
+
+.trait-fill--courage {
+  background: linear-gradient(90deg, #dc2626 0%, #f87171 100%);
+}
+
+.trait-fill--wisdom {
+  background: linear-gradient(90deg, #059669 0%, #34d399 100%);
+}
+
+.trait-fill--humility {
+  background: linear-gradient(90deg, #9333ea 0%, #c084fc 100%);
+}
+
+.trait-fill--compassion {
+  background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
+}
+
+
+/* --- Scripture Card --- */
+.scripture-card {
+  background: rgba(240, 192, 64, 0.07);
+  border: 1px solid rgba(240, 192, 64, 0.15);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin: 12px 0;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  position: relative;
+  overflow: hidden;
+  transition:
+    max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.3s ease,
+    background 0.3s ease;
+}
+
+.scripture-card::before {
+  content: '\201C';
+  position: absolute;
+  top: -4px;
+  left: 10px;
+  font-size: 3.5rem;
+  font-family: var(--font-display);
+  color: rgba(240, 192, 64, 0.12);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.scripture-card .scripture-ref {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+}
+
+.scripture-card.collapsed {
+  max-height: 0;
+  padding: 0 20px;
+  opacity: 0;
+}
+
+.scripture-card.expanded {
+  max-height: 300px;
+  opacity: 1;
+}
+
+
+/* --- Trait Toast / Popup --- */
+.trait-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  padding: 10px 24px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.95) 0%, rgba(40, 40, 65, 0.95) 100%);
+  border: 1px solid var(--color-primary);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(240, 192, 64, 0.15);
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s ease;
+}
+
+.trait-toast.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.trait-toast .trait-toast-icon {
+  margin-right: 8px;
+}
+
+.trait-toast .trait-toast-value {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Toast variants */
+.trait-toast--faith { border-color: var(--color-accent-faith); }
+.trait-toast--faith .trait-toast-value { color: var(--color-accent-faith); }
+
+.trait-toast--courage { border-color: var(--color-accent-courage); }
+.trait-toast--courage .trait-toast-value { color: var(--color-accent-courage); }
+
+.trait-toast--wisdom { border-color: var(--color-accent-wisdom); }
+.trait-toast--wisdom .trait-toast-value { color: var(--color-accent-wisdom); }
+
+
+/* --- Responsive --- */
+@media (max-width: 400px) {
+  body {
+    font-size: 15px;
+  }
+
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+
+  .btn-choice {
+    min-height: 48px;
+    padding: 12px 16px;
+    font-size: 0.93rem;
+  }
+
+  .btn-primary {
+    padding: 12px 22px;
+    font-size: 0.93rem;
+  }
+
+  .scripture-card {
+    padding: 14px 16px;
+    font-size: 0.88rem;
+  }
+
+  .trait-toast {
+    font-size: 0.78rem;
+    padding: 8px 18px;
+  }
+}
